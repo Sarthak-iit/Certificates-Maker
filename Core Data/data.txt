@@ -1,0 +1,3 @@
+web_git_repo_link = 'git@github.com:PetrichorIITPkd/Petrichor23.git' #Enter git repo ssh id for website git
+data_git_repo_link = 'git@github.com:PetrichorIITPkd/CertificatesData-2023.git' #Enter git repo ssh id for data git
+year = '2023' #enter year here
