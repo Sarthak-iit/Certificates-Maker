@@ -49,8 +49,11 @@ cp "Core Data/Date_Converter.py" "${data_git_repo_name}/$evnt_name_underscore/Pa
 cp "Core Data/winner_new.py" "${data_git_repo_name}/$evnt_name_underscore/Winner_data"
 cp "Core Data/Date_Converter.py" "${data_git_repo_name}/$evnt_name_underscore/Winner_data"
 
-cp "Background/$event.png" "${data_git_repo_name}/$evnt_name_underscore/Participation_data/Participation/"
-cp "Background/$event.png" "${data_git_repo_name}/$evnt_name_underscore/Winner_data/Winner/"
+cp "Background/$event.png" "${data_git_repo_name}/$evnt_name_underscore/Participation_data/Participation/bg.png"
+cp "Background/$event.png" "${data_git_repo_name}/$evnt_name_underscore/Winner_data/Winner/bg.png"
+
+cp "Core Data/logo.png" "${data_git_repo_name}/$evnt_name_underscore/Participation_data/Participation/"
+cp "Core Data/logo.png" "${data_git_repo_name}/$evnt_name_underscore/Winner_data/Winner/"
 
 cp "Templates/$event.jpg" "${data_git_repo_name}/$evnt_name_underscore/Participation_data"
 cp "Templates/$event-1.jpg" "${data_git_repo_name}/$evnt_name_underscore/Winner_data"

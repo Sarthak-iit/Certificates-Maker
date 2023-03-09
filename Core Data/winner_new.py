@@ -8,7 +8,7 @@ import Date_Converter
 from timeit import default_timer as timer
 import math
 import datetime
-import pdb
+
 
 def day_to_suffix(day):
     day=int(day)
@@ -22,7 +22,7 @@ def day_to_suffix(day):
         return str(day)+'th'
 
 def date_to_text(a,b):
-    if (not math.isnan(b)) :
+    if (type(b)==str) :
         date_from=a.split('/')
         date_to=b.split('/')
         date_from = datetime.datetime(int(date_from[2])+2000,int(date_from[1]),int(date_from[0]))
@@ -53,14 +53,20 @@ def print_percentage(start_time,current_iter,total_iter):
     k=math.ceil(current_perc*40/100)
     print('['+('|'* k) + (' '*(40-k)) + '] '+ str(current_perc) + '%' + 'Time Left : ' + str(math.floor(time_left(start_time,current_iter,total_iter))) + 'secs',sep='')
 
-input_data=sys.argv #data from command line in the format filename, event_name, email send or not,  
+input_data=sys.argv #data from command line in the format filename, event_name, email send or not, category
 
-path=f"./{input_data[1]}.csv"
-send= int(input_data[2])
+eventname=''
+
+for i in range(1,len(input_data)-2):
+    eventname+=f'{i} '
+eventname=eventname.rstrip()
+
+path=f"./{eventname}.csv"
+send= int(input_data[-2])
 dataframe=pd.read_csv(path)
 font_name=ImageFont.truetype('./STIXTwoText-Regular.otf',80,encoding="unic")
 font_event=ImageFont.truetype('./STIXTwoText-Regular.otf',50,encoding="unic")
-
+event_category = input_data[-1]
 directory="./Winner/all_certificates"
 
 
@@ -87,6 +93,12 @@ for index,item in dataframe.iterrows():
             img=Image.open('ROS Robotic Design.jpeg')
         else:
             img=Image.open(f'{item["event"]}-{item["pos"]}.jpg')
+        
+        qr_path=''
+        if event_category == 'Workshops':
+            qr_path = f"https://www.cert.petrichor.events/Workshops/2023/{name_wo_spc}-{item['email']}.html"
+        else:
+            qr_path = f"https://www.cert.petrichor.events/{eventname}_Events/2023/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
 
         draw=ImageDraw.Draw(img)
         qr = qrcode.QRCode(
@@ -96,7 +108,8 @@ for index,item in dataframe.iterrows():
         border=2
         )
         name_wo_spc = item['name'].replace(' ','')
-        qr.add_data(f"https://www.cert.petrichor.events/Technical_Events/2023/{item['event']}/Winner/{name_wo_spc}-{item['email']}.html")
+        event_with_under = item['event'].replace(' ','_')
+        qr.add_data(f'{qr_path}')        
         qr.make()
         qr_img = qr.make_image(fill_color="black", back_color="white")
 
@@ -301,7 +314,7 @@ for index,item in dataframe.iterrows():
         </div>
             
         <div id="content">
-            <p>This certificate is awarded to {item['name']} for securing {item['pos']}{suf} Position in the event {item['event']} the {item['desc']} Competition conducted by Petrichor, IIT Palakkad {date_string}.</p>        <a href="./all_certificates/{name_wo_spc}-{item['email']}.jpg" target="_blank"><img src="./all_certificates/{name_wo_spc}-{item['email']}.jpg" alt="" id="cer"></a>
+            <p>This certificate is awarded to {item['name']} for securing {item['pos']}{suf} Position in the event {item['event']}, the {item['desc']} Competition conducted by Petrichor, IIT Palakkad {date_string}.</p>        <a href="./all_certificates/{name_wo_spc}-{item['email']}.jpg" target="_blank"><img src="./all_certificates/{name_wo_spc}-{item['email']}.jpg" alt="" id="cer"></a>
         </div>
             
     </body>
@@ -310,15 +323,10 @@ for index,item in dataframe.iterrows():
         f.write(message)
         f.close()
 
-
+start = timer()
 current_mail_no=0
 
-
-if 0:
-    print('fkakfa')
-
-start = timer()
-if send!=0:
+if send==1:
     yag = yagmail.SMTP('events.petrichor@iitpkd.ac.in', 'esbfbqaippqvlmfd')
     for filename in os.listdir(directory):
         for index,item in dataframe.iterrows():
