@@ -58,7 +58,7 @@ input_data=sys.argv #data from command line in the format filename, event_name, 
 eventname=''
 
 for i in range(1,len(input_data)-2):
-    eventname+=f'{i} '
+    eventname+=f'{input_data[i]} '
 eventname=eventname.rstrip()
 
 path=f"./{eventname}.csv"
@@ -94,11 +94,7 @@ for index,item in dataframe.iterrows():
         else:
             img=Image.open(f'{item["event"]}-{item["pos"]}.jpg')
         
-        qr_path=''
-        if event_category == 'Workshops':
-            qr_path = f"https://www.cert.petrichor.events/Workshops/2023/{name_wo_spc}-{item['email']}.html"
-        else:
-            qr_path = f"https://www.cert.petrichor.events/{eventname}_Events/2023/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
+        
 
         draw=ImageDraw.Draw(img)
         qr = qrcode.QRCode(
@@ -109,6 +105,11 @@ for index,item in dataframe.iterrows():
         )
         name_wo_spc = item['name'].replace(' ','')
         event_with_under = item['event'].replace(' ','_')
+        qr_path=''
+        if event_category == 'Workshops':
+            qr_path = f"https://www.cert.petrichor.events/Workshops/2023/{name_wo_spc}-{item['email']}.html"
+        else:
+            qr_path = f"https://www.cert.petrichor.events/{event_category}/2023/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
         qr.add_data(f'{qr_path}')        
         qr.make()
         qr_img = qr.make_image(fill_color="black", back_color="white")

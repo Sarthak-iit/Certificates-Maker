@@ -80,11 +80,11 @@ then
 	send=1
 fi
 cd ${data_git_repo_name}/$evnt_name_underscore/Participation_data
-python3 main_new.py $event $send
+python3 main_new.py $event $send $category
 mkdir ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 cp -R "Participation" ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 cd "../Winner_data"
-python3 winner_new.py $event $send
+python3 winner_new.py $event $send $category
 cp -R "Winner" ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 
 cd ../../
