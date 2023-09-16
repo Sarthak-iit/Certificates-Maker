@@ -17,7 +17,7 @@ bash setup.sh
 ### Pre-Processing Data for Certificates
 #### Preparing the CSV Files
 1. Refer to the test.csv file for how data should look like
-2. There should be two csv files with the names `[event_name].csv` and `[event_name]_win.csv` for the details of participants and winners respectively. Both should have the following informtion.
+2. There should be two csv files for each event in the folder `CSV Files` with the names `[event_name].csv` and `[event_name]_win.csv` for the details of participants and winners respectively. Both should have the following informtion.
 3. The csv files should be saved in the folder `CSV Files`.
 2. It should contain both name and email of each participant. IF THE EMAIL OF MORE THAN ONE PARTICIPANT IS SAME THEN MAKE SURE THEIR NAME ARE DIFFERENT. ALSO ENSURE THAT EMAIL ID'S GIVEN ARE CORRECT.
 3. It should have two columns named 'event', 'desc' with them containing name of event and their description respectively. For example: Algo-Quest and Competitive Programming. THE DESC SHOULD NOT CONTAIN COMPETITION, IT WILL BE APPENDED AUTOMATICALLY.
