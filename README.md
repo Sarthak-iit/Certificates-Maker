@@ -8,7 +8,7 @@
 2) Clone the repo locally to your system.
 4) Open data.txt and add the ssh id of the website github repo  and the certificates data github repo and the year you are working in.
 5) Install the following python libraries `pandas,yagmail,qrcode` using pip.[Refer](https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-from-pypi)
-6) Open terminal in Mac/Linux or Command Prompt in Windows and changing the working directory to the folder 'Core Data' inside the main folder('WORKFLOW') by using cd.
+6) Open terminal in Mac/Linux or Command Prompt in Windows and changing the working directory to the folder `Core Data` inside the main folder(`Certificates-Maker`) by using cd.
 7) Run the Setup.sh script file by type the following command on your terminal 
 ```
 bash setup.sh
