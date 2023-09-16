@@ -6,8 +6,9 @@
 1) Add yourself as a collaborator in the certificates git repo
 1) Create an ssh id and add it into your github account ([Refer](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)). You might have to generate a new ssh key.
 3) Open data.txt and add the ssh id of the website github repo  and the certificates data github repo and the year you are working in.
-4) Open terminal in Mac/Linux or Command Prompt in Windows and changing the working directory to the folder 'Core Data' inside the main folder('WORKFLOW') by using cd.
-5) Run the Setup.sh script file by type the following command on your terminal 
+4) Install the following python libraries `pandas,yagmail,qrcode` using pip.[Refer](https://packaging.python.org/en/latest/tutorials/installing-packages/#installing-from-pypi)
+5) Open terminal in Mac/Linux or Command Prompt in Windows and changing the working directory to the folder 'Core Data' inside the main folder('WORKFLOW') by using cd.
+6) Run the Setup.sh script file by type the following command on your terminal 
 ```
 bash setup.sh
 ```
