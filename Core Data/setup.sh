@@ -19,6 +19,10 @@ git clone $data_git_repo_link
 cd ~/
 
 git clone $web_git_repo_link
+mkdir $web_git_repo_name/Informal_Events/
+mkdir $web_git_repo_name/Technical_Events/
+mkdir $web_git_repo_name/Cultural_Events/
+mkdir $web_git_repo_name/Workshops/
 mkdir $web_git_repo_name/Informal_Events/$year
 mkdir $web_git_repo_name/Technical_Events/$year
 mkdir $web_git_repo_name/Cultural_Events/$year
