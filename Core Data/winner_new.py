@@ -107,9 +107,9 @@ for index,item in dataframe.iterrows():
         event_with_under = item['event'].replace(' ','_')
         qr_path=''
         if event_category == 'Workshops':
-            qr_path = f"https://www.cert.petrichor.events/Workshops/2023/{name_wo_spc}-{item['email']}.html"
+            qr_path = f"https://www.cert.petrichor.events/Workshops/2024/{name_wo_spc}-{item['email']}.html"
         else:
-            qr_path = f"https://www.cert.petrichor.events/{event_category}/2023/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
+            qr_path = f"https://www.cert.petrichor.events/{event_category}/2024/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
         qr.add_data(f'{qr_path}')        
         qr.make()
         qr_img = qr.make_image(fill_color="black", back_color="white")
