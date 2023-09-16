@@ -37,7 +37,7 @@ bash setup.sh
 
 #### Preparing the Background Image
 1. Choose the background image pertaining to the event. Should be color matched to the certificates. 
-2. Save the background image for ech event in the `Background` folder as `[event_name].png`. DO ENSURE THAT THE BACKGORUND IMAGE IS A PNG IMAGE.
+2. Save the background image for each event in the `Background` folder as `[event_name].png`. DO ENSURE THAT THE BACKGORUND IMAGE IS A PNG IMAGE.
 
 
 ### Preparing the Certificates
