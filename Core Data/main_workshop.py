@@ -305,7 +305,7 @@ total_mail_no=len(dataframe.index)
 if send==1:
         print('okay')
         yag = yagmail.SMTP('events.petrichor@iitpkd.ac.in', 'esbfbqaippqvlmfd')
-        for filename in os.listdir(directory):
+        for filename in os.listdir(directory_cert):
             for index,item in dataframe.iterrows():
                 name_wo_spc = item['name'].replace(' ','')
                 if f"{name_wo_spc}-{item['email']}.jpg"==filename:
