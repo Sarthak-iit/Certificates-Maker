@@ -303,6 +303,7 @@ start = timer()
 current_mail_no=0
 total_mail_no=len(dataframe.index)
 if send==1:
+        print('okay')
         yag = yagmail.SMTP('events.petrichor@iitpkd.ac.in', 'esbfbqaippqvlmfd')
         for filename in os.listdir(directory):
             for index,item in dataframe.iterrows():
