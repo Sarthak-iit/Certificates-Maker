@@ -61,5 +61,8 @@ git push
 cd ~/$web_git_repo_name/$category/
 git pull
 git add .
+echo "add done"
 git commit -m "added the event ${event}"
+echo "commit done"
 git push
+echo "push done"
