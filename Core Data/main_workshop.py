@@ -65,8 +65,8 @@ year=input_data[-1]
 send= int(input_data[-3])
 print(send)
 dataframe=pd.read_csv(path)
-font_name=ImageFont.truetype('./STIXTwoText-Regular.otf',80,encoding="unic")
-font_event=ImageFont.truetype('./STIXTwoText-Regular.otf',50,encoding="unic")
+font_name=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',80,encoding="unic")
+font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',150,encoding="unic")
 event_category = input_data[-2]
 directory_cert="./Participation/all_certificates"
 directory="./Participation"
