@@ -90,7 +90,7 @@ for index,item in dataframe.iterrows():
     event_with_under = item['event'].replace(' ','_')
     qr_path=''
     if event_category == 'Workshops':
-        qr_path = f"https://www.cert.petrichor.events/Workshops/Participation/{year}/{name_wo_spc}-{item['email']}.html"
+        qr_path = f"https://www.cert.petrichor.events/Workshops/{year}/Participation/{name_wo_spc}-{item['email']}.html"
     else:
         qr_path = f"https://www.cert.petrichor.events/{event_category}/{year}/{event_with_under}/Participation/{name_wo_spc}-{item['email']}.html"
     qr.add_data(f'{qr_path}')
