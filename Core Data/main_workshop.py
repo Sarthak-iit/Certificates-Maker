@@ -309,6 +309,7 @@ if send==1:
             for index,item in dataframe.iterrows():
                 name_wo_spc = item['name'].replace(' ','')
                 if f"{name_wo_spc}-{item['email']}.jpg"==filename:
+                    print("okay-2")
                     email=item['email']
                     contents = [f'''Dear Participant, 
 
