@@ -1,11 +1,11 @@
 #!/bin/sh
-#only for events
+#only for workshops
 
 data_git_repo_name=`python3 variables.py data_git_repo_name`
 web_git_repo_name=`python3 variables.py web_git_repo_name`
 year=`python3 variables.py year`
-echo ${category}
 
+category="Workshops"
 cd ../
 #change to main directory
 main_dir= `pwd`
@@ -48,6 +48,7 @@ then
 fi
 cd ${data_git_repo_name}/$evnt_name_underscore
 python3 main_workshop.py $event $send $category $year
+echo ${category}
 mkdir ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 cp -R "Participation" ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 

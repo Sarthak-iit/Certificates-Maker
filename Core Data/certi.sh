@@ -34,7 +34,7 @@ then
 fi
 if [ $category == "Workshops" ]
 then 
-	bash workshop.sh
+	sudo bash workshop.sh
 fi
 
 
