@@ -1,6 +1,11 @@
 #!/bin/sh
 #only for events
 
+data_git_repo_name=`python3 variables.py data_git_repo_name`
+web_git_repo_name=`python3 variables.py web_git_repo_name`
+year=`python3 variables.py year`
+echo ${category}
+
 cd ../
 #change to main directory
 main_dir= `pwd`

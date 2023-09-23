@@ -27,13 +27,14 @@ do
 	echo "Choose from 'Technical' , 'Cultural' , 'Informal' , 'Workshops'"
 	read category
 done
+export category
 if [ $category == "Technical" ] || [ $category == "Cultural" ] || [ $category == "Informal" ]
 then 
-	. event.sh
+	bash event.sh
 fi
 if [ $category == "Workshops" ]
 then 
-	. workshop.sh
+	bash workshop.sh
 fi
 
 
