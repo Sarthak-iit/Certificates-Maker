@@ -27,7 +27,10 @@ def date_to_text(a,b):
         date_to=b.split('/')
         date_from = datetime.datetime(int(date_from[2])+2000,int(date_from[1]),int(date_from[0]))
         date_to = datetime.datetime(int(date_to[2])+2000,int(date_to[1]),int(date_to[0]))
-        string = 'from ' + day_to_suffix(date_from.strftime("%d")) + ' ' + date_from.strftime("%B") + ' ' + date_from.strftime("%Y") + ' to '+ day_to_suffix(date_to.strftime("%d")) + ' ' + date_to.strftime("%B")+' '+date_to.strftime("%Y")
+        if date_to-date_from == datetime.timedelta(days=1):
+            string = 'on ' + day_to_suffix(date_from.strftime("%d"))+ ', '+ day_to_suffix(date_to.strftime("%d")) + ' ' + date_to.strftime("%B")+' '+date_to.strftime("%Y")
+        else:
+            string = 'from ' + day_to_suffix(date_from.strftime("%d")) + ' ' + date_from.strftime("%B") + ' ' + date_from.strftime("%Y") + ' to '+ day_to_suffix(date_to.strftime("%d")) + ' ' + date_to.strftime("%B")+' '+date_to.strftime("%Y")
     else:
         date=a.split('/')
         date = datetime.datetime(int(date[2])+2000,int(date[1]),int(date[0]))
@@ -285,7 +288,7 @@ for index,item in dataframe.iterrows():
     </div>
         
     <div id="content">
-        <p>This certificate is awarded to {item['name']} for participating in the event {item['event']}, the {item['desc']} Competition conducted by Petrichor, IIT Palakkad {date_string}.</p>
+        <p>This certificate is awarded to {item['name']} for enthusiastically participating in workshop on {item['event']} conducted by Petrichor, IIT Palakkad {date_string}.</p>
         <a href="./all_certificates/{name_wo_spc}-{item['email']}.jpg" target="_blank"><img src="./all_certificates/{name_wo_spc}-{item['email']}.jpg" alt="" id="cer"></a>
     </div>
         
@@ -307,16 +310,16 @@ if send==1:
                     email=item['email']
                     contents = [f'''Dear Participant, 
 
-		                Thanks for participating in the event {item['event']} by Petrichor'23 . This is the attached participation certificate.
+		                Thanks for participating in the Workshop Series by Petrichor'{year[-2:]} . This is the attached participation certificate.
 		                
 		                If any concerns please reply to this mail
 
 
 		        Regards,
 		        Petrichor Technical Team.
-		        ''', f'./Participation/all_certificates/{name_wo_spc}-{email}.jpg'
+		        ''', f'{directory_cert}/{name_wo_spc}-{email}.jpg'
 		    ]
-                    yag.send(f'{email}', f"Petrichor'23: {item['event']} Participation Certificate", contents)
+                    yag.send(f'{email}', f"Petrichor'{year[-2:]}: Workshop Participation Certificate", contents)
                     current_mail_no+=1
                     print_percentage(start,current_mail_no,total_mail_no)
 

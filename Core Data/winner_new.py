@@ -53,7 +53,7 @@ def print_percentage(start_time,current_iter,total_iter):
     k=math.ceil(current_perc*40/100)
     print('['+('|'* k) + (' '*(40-k)) + '] '+ str(current_perc) + '%' + 'Time Left : ' + str(math.floor(time_left(start_time,current_iter,total_iter))) + 'secs',sep='')
 
-input_data=sys.argv #data from command line in the format filename, event_name, email send or not, category
+input_data=sys.argv #data from command line in the format filename, event_name, email send or not, category, year
 
 eventname=''
 
@@ -62,11 +62,12 @@ for i in range(1,len(input_data)-2):
 eventname=eventname.rstrip()
 
 path=f"./{eventname}.csv"
-send= int(input_data[-2])
+year=input_data[-1]
+send= int(input_data[-3])
 dataframe=pd.read_csv(path)
 font_name=ImageFont.truetype('./STIXTwoText-Regular.otf',80,encoding="unic")
 font_event=ImageFont.truetype('./STIXTwoText-Regular.otf',50,encoding="unic")
-event_category = input_data[-1]
+event_category = input_data[-2]
 directory="./Winner/all_certificates"
 
 
