@@ -9,6 +9,31 @@ from timeit import default_timer as timer
 import math
 import pdb
 import datetime
+import threading
+import time
+from tqdm import tqdm
+
+def send_mail(item, year,index):
+    name_wo_spc = item['name'].replace(' ','')
+    global current_mail_no
+    global dataframe
+    if item['sent']!='YES':
+        email=item['email']
+        contents = [f'''Dear Participant, 
+
+                    Thanks for participating in the Workshop Series by Petrichor'{year[-2:]} . This is the attached participation certificate.
+                    
+                    If any concerns please reply to this mail
+
+
+            Regards,
+            Petrichor Technical Team.
+            ''', f'{directory_cert}/{name_wo_spc}-{email}.jpg'
+        ]
+        yag.send(f'{email}', f"Petrichor'{year[-2:]}: Workshop Participation Certificate", contents)
+        dataframe.loc[index,'sent']='YES'
+    current_mail_no+=1
+        
 
 def day_to_suffix(day):
     day=int(day)
@@ -23,17 +48,30 @@ def day_to_suffix(day):
 
 def date_to_text(a,b):
     if (type(b)==str) :
-        date_from=a.split('/')
-        date_to=b.split('/')
-        date_from = datetime.datetime(int(date_from[2])+2000,int(date_from[1]),int(date_from[0]))
-        date_to = datetime.datetime(int(date_to[2])+2000,int(date_to[1]),int(date_to[0]))
+        if ('/' in a):
+            date_from=a.split('/')
+            date_to=b.split('/')
+        elif ('-' in b):
+            date_from=a.split('-')
+            date_to=b.split('-')
+        if int(date_from[2])<100:
+            date_from = datetime.datetime(int(date_from[2])+2000,int(date_from[1]),int(date_from[0]))
+        else:
+            date_from = datetime.datetime(int(date_from[2]),int(date_from[1]),int(date_from[0]))
+        if int(date_to[2])<100:
+            date_to = datetime.datetime(int(date_to[2])+2000,int(date_to[1]),int(date_to[0]))
+        else:
+            date_to = datetime.datetime(int(date_to[2]),int(date_to[1]),int(date_to[0]))
         if date_to-date_from == datetime.timedelta(days=1):
             string = 'on ' + day_to_suffix(date_from.strftime("%d"))+ ', '+ day_to_suffix(date_to.strftime("%d")) + ' ' + date_to.strftime("%B")+' '+date_to.strftime("%Y")
         else:
             string = 'from ' + day_to_suffix(date_from.strftime("%d")) + ' ' + date_from.strftime("%B") + ' ' + date_from.strftime("%Y") + ' to '+ day_to_suffix(date_to.strftime("%d")) + ' ' + date_to.strftime("%B")+' '+date_to.strftime("%Y")
     else:
         date=a.split('/')
-        date = datetime.datetime(int(date[2])+2000,int(date[1]),int(date[0]))
+        if int(date[2])<100:
+            date = datetime.datetime(int(date[2])+2000,int(date[1]),int(date[0]))
+        else:
+            date = datetime.datetime(int(date[2]),int(date[1]),int(date[0]))
         string = 'on' + ' '+ day_to_suffix(date.strftime("%d")) + ' ' + date.strftime("%B") + ' ' + date.strftime("%Y")
     return string
 
@@ -47,10 +85,22 @@ def time_left(start_time,current_iter,total_iter):
 
 
 def print_percentage(start_time,current_iter,total_iter):
+    global current_mail_no
+    global sent
     os.system('clear')
     current_perc = math.ceil((current_iter*100)/total_iter)
     k=math.ceil(current_perc*40/100)
-    print('['+('|'* k) + (' '*(40-k)) + '] '+ str(current_perc) + '%' + 'Time Left : ' + str(math.floor(time_left(start_time,current_iter,total_iter))) + 'secs',sep='')
+    t_left = math.floor(time_left(start_time,current_iter,total_iter))
+    while (t_left >= 0):
+        if current_iter==current_mail_no:
+            os.system('clear')
+            print(current_iter,total_iter,)
+            print('['+('|'* k) + (' '*(40-k)) + '] '+ str(current_perc) + '%' + 'Time Left : ' + str(t_left) + 'secs',sep='')
+            time.sleep(0.99)
+            t_left -= 1
+        else:
+            break
+
 
 input_data=sys.argv #data from command line in the format filename, event_name, email send or not, category, year
 
@@ -64,6 +114,7 @@ path=f"./{eventname}.csv"
 year=input_data[-1]
 send= int(input_data[-3])
 print(send)
+global dataframe
 dataframe=pd.read_csv(path)
 font_name=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',80,encoding="unic")
 font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',150,encoding="unic")
@@ -102,6 +153,10 @@ for index,item in dataframe.iterrows():
 
     W, H = (int(item['name_x']),int(item['name_y']))
 #    W, H = (786,750)
+    if len(item['name'])>25:
+        font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',80,encoding="unic")
+    else:
+        font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',150,encoding="unic")
     msg = f"{item['name']}"
     _, _, w, h = draw.textbbox((0, 0), msg, font=font_event)
     draw.text((W-w/2,H-h/2),text=f"{item['name']}",fill=(0,0,0),font=font_event)
@@ -282,7 +337,7 @@ for index,item in dataframe.iterrows():
 </head>
 <body>
     <div id="heading">
-        <h1>Petrichor '23</h1>
+        <h1>Petrichor '{year[-2:]}</h1>
     </div>
     <div id="im">
         <img src="logo.png" alt="" id="logo" >
@@ -305,26 +360,16 @@ total_mail_no=len(dataframe.index)
 if send==1:
         print('okay')
         yag = yagmail.SMTP('events.petrichor@iitpkd.ac.in', 'esbfbqaippqvlmfd')
-        for filename in os.listdir(directory_cert):
-            for index,item in dataframe.iterrows():
-                name_wo_spc = item['name'].replace(' ','')
-                if f"{name_wo_spc}-{item['email']}.jpg"==filename:
-                    print("okay-2")
-                    email=item['email']
-                    contents = [f'''Dear Participant, 
-
-		                Thanks for participating in the Workshop Series by Petrichor'{year[-2:]} . This is the attached participation certificate.
-		                
-		                If any concerns please reply to this mail
-
-
-		        Regards,
-		        Petrichor Technical Team.
-		        ''', f'{directory_cert}/{name_wo_spc}-{email}.jpg'
-		    ]
-                    yag.send(f'{email}', f"Petrichor'{year[-2:]}: Workshop Participation Certificate", contents)
-                    current_mail_no+=1
-                    print_percentage(start,current_mail_no,total_mail_no)
+        for index in tqdm(range(len(dataframe)), desc = 'Email'):
+            send_mail(dict(dataframe.loc[index]),year,index)
+##        for filename in os.listdir(directory_cert):
+##            for index,item in dataframe.iterrows():
+##                process1 = threading.Thread(target=send_mail, args = (item,year,index))
+##                process2 = threading.Thread(target=print_percentage, args = (start,current_mail_no,total_mail_no,))
+##                process1.start()
+##                process2.start()
+##                process1.join()
+dataframe.to_csv(path,index=False)
 
 
 # another method of sending the mail

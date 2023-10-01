@@ -15,13 +15,6 @@ read event
 
 evnt_name_underscore=`python3 Core\ Data/underscore.py $event`
 
-mkdir ${data_git_repo_name}/$evnt_name_underscore
-mkdir ${data_git_repo_name}/$evnt_name_underscore
-mkdir ${data_git_repo_name}/$evnt_name_underscore/Participation
-mkdir ${data_git_repo_name}/$evnt_name_underscore/Participation/all_certificates
-
-cp "Core Data/main_workshop.py" "${data_git_repo_name}/$evnt_name_underscore"
-cp "Core Data/Date_Converter.py" "${data_git_repo_name}/$evnt_name_underscore"
 
 cp "Background/$event.png" "${data_git_repo_name}/$evnt_name_underscore/Participation/bg.png"
 
@@ -52,22 +45,25 @@ then
 	send=1
 fi
 cd ${data_git_repo_name}/$evnt_name_underscore
+find Participation -type f -not -name "*.png" -delete
+rm -r Participation/all_certificates/*
 python3 main_workshop.py $event $send $category $year
-echo ${category}
+cp "$event.csv" "../../CSV Files/"
 mkdir ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
+rm -r ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}/*
 cp -R "Participation"/ ~/$web_git_repo_name/${category}/$year/${evnt_name_underscore}
 
 cd ../
 git pull
 git add .
-git commit -m "added the event ${event}"
+git commit -m "updated the event ${event}"
 git push
 
 cd ~/$web_git_repo_name/$category/
 git pull
 git add .
 echo "add done"
-git commit -m "added the event ${event}"
+git commit -m "updated the event ${event}"
 echo "commit done"
 git push
 echo "push done"
