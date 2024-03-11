@@ -23,6 +23,8 @@ def send_mail(item, year,index):
 
                     Thanks for participating in the Workshop Series by Petrichor'{year[-2:]} . This is the attached participation certificate.
                     
+                    We would also like you to fill this <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOYaaaoRvcJopcLrSEMHGAE6v9P7M57PQL8t24Apzi3w_Ysw/viewform">feedback form</a> so that we can take your suggestions and improve next year.
+
                     If any concerns please reply to this mail
 
 
@@ -146,20 +148,20 @@ for index,item in dataframe.iterrows():
         qr_path = f"https://www.cert.petrichor.events/{event_category}/{year}/{event_with_under}/Participation/{name_wo_spc}-{item['email']}.html"
     qr.add_data(f'{qr_path}')
     qr.make()
-    qr_img = qr.make_image(fill_color="black", back_color="white")
+    qr_img = qr.make_image(fill_color="black", back_color=(230,211,255))
 
 
 
 
     W, H = (int(item['name_x']),int(item['name_y']))
 #    W, H = (786,750)
-    if len(item['name'])>25:
+    if len(item['name'])>18:
         font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',80,encoding="unic")
     else:
         font_event=ImageFont.truetype('./IMFellEnglishSC-Regular.otf',150,encoding="unic")
     msg = f"{item['name']}"
     _, _, w, h = draw.textbbox((0, 0), msg, font=font_event)
-    draw.text((W-w/2,H-h/2),text=f"{item['name']}",fill=(0,0,0),font=font_event)
+    draw.text((W-w/2,H-h/2),text=f"{item['name']}",fill=(255,255,255),font=font_event)
 
 
     

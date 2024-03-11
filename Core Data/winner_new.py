@@ -11,6 +11,7 @@ import threading
 import datetime
 import time
 import pdb
+from tqdm import tqdm
 
 
 def send_mail(item,year,index):
@@ -27,24 +28,25 @@ def send_mail(item,year,index):
             suf='rd'
         else:
             suf='th'
-        if f"{name_wo_spc}-{item['email']}.jpg"==filename:
-            if item['sent']!='YES':
-                email=item['email']
-                contents = [
-                    f'''Dear Participant, 
+        if item['sent']!='YES':
+            email=item['email']
+            contents = [
+                f'''Dear Participant, 
 
-                            Congratulations on securing {item['pos']}{suf} position in the event {item['event']} by Petrichor'{year[-2:]} . This is the attached certificate of achievement.
-                            
-                            If any concerns please reply to this mail
+                        Congratulations on securing {item['pos']}{suf} position in the event {item['event']} by Petrichor'{year[-2:]} . This is the attached certificate of achievement.
+                        
+                        We would also like you to fill this <a href="https://docs.google.com/forms/d/e/1FAIpQLSeOYaaaoRvcJopcLrSEMHGAE6v9P7M57PQL8t24Apzi3w_Ysw/viewform">feedback form</a> so that we can take your suggestions and improve next year.
+                        
+                        If any concerns please reply to this mail
 
 
-                    Regards,
-                    Petrichor Technical Team.
-                    ''', f'./Winner/all_certificates/{name_wo_spc}-{email}.jpg'
-                ]
-                yag.send(f'{email}', f"Petrichor'{year[-2:]}: {item['event']}  Certificate of Achievement", contents)
-                dataframe.loc[index,'sent']='YES'
-            current_mail_no+=1
+                Regards,
+                Petrichor Technical Team.
+                ''', f'./Winner/all_certificates/{name_wo_spc}-{email}.jpg'
+            ]
+            yag.send(f'{email}', f"Petrichor'{year[-2:]}: {item['event']}  Certificate of Achievement", contents)
+            dataframe.loc[index,'sent']='YES'
+        current_mail_no+=1
 
 def day_to_suffix(day):
     day=int(day)
@@ -101,6 +103,7 @@ def time_left(start_time,current_iter,total_iter):
 
 def print_percentage(start_time,current_iter,total_iter):
     global current_mail_no
+    global sent
     os.system('clear')
     current_perc = math.ceil((current_iter*100)/total_iter)
     k=math.ceil(current_perc*40/100)
@@ -108,6 +111,7 @@ def print_percentage(start_time,current_iter,total_iter):
     while (t_left >= 0):
         if current_iter==current_mail_no:
             os.system('clear')
+            print(current_iter,total_iter,)
             print('['+('|'* k) + (' '*(40-k)) + '] '+ str(current_perc) + '%' + 'Time Left : ' + str(t_left) + 'secs',sep='')
             time.sleep(0.99)
             t_left -= 1
@@ -175,7 +179,7 @@ for index,item in dataframe.iterrows():
             qr_path = f"https://www.cert.petrichor.events/{event_category}/2024/{event_with_under}/Winner/{name_wo_spc}-{item['email']}.html"
         qr.add_data(f'{qr_path}')        
         qr.make()
-        qr_img = qr.make_image(fill_color="black", back_color="white")
+        qr_img = qr.make_image(fill_color="black", back_color=(255,255,255))
 
 
 
@@ -184,7 +188,7 @@ for index,item in dataframe.iterrows():
     #    W, H = (786,750)
         msg = f"{item['name']}"
         _, _, w, h = draw.textbbox((0, 0), msg, font=font_event)
-        draw.text((W-w/2,H-h/2),text=f"{item['name']}",fill=(0,0,0),font=font_event)
+        draw.text((W-w/2,H-h/2),text=f"{item['name']}",fill=(255,255,255),font=font_event)
 
 
         
@@ -192,7 +196,7 @@ for index,item in dataframe.iterrows():
             
     #    offset=1123,1073
         size = int(qr_img.size[0]/2)
-    offset = (int(item['qr_x'])-size),(int(item['qr_y'])-size)
+        offset = (int(item['qr_x'])-size),(int(item['qr_y'])-size)
         img.paste(qr_img,offset)
         img.save('./Winner/all_certificates/{}-{}.jpg'.format(name_wo_spc,item['email']))
 
@@ -391,15 +395,18 @@ for index,item in dataframe.iterrows():
 start = timer()
 current_mail_no=0
 
+total_mail_no=len(dataframe.index)
 if send==1:
     yag = yagmail.SMTP('events.petrichor@iitpkd.ac.in', 'esbfbqaippqvlmfd')
-    for filename in os.listdir(directory):
-        for index,item in dataframe.iterrows():
-            process1 = threading.Thread(target=send_mail, args = (item,year,index))
-            process2 = threading.Thread(target=print_percentage, args = (start,current_mail_no,total_mail_no,))
-            process1.start()
-            process2.start()
-            process1.join()
+    for index in tqdm(range(len(dataframe)), desc = 'Email'):
+        send_mail(dict(dataframe.loc[index]),year,index)
+    # for filename in os.listdir(directory):
+    #     for index,item in dataframe.iterrows():
+    #         process1 = threading.Thread(target=send_mail, args = (item,year,index))
+    #         process2 = threading.Thread(target=print_percentage, args = (start,current_mail_no,total_mail_no,))
+    #         process1.start()
+    #         process2.start()
+    #         process1.join()
 dataframe.to_csv(path,index=False)
 
 # another method of sending the mail

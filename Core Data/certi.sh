@@ -2,7 +2,18 @@
 #in Core data directory
 data_git_repo_name=`python3 variables.py data_git_repo_name`
 web_git_repo_name=`python3 variables.py web_git_repo_name`
+data_git_repo_link=`python3 variables.py data_git_repo_link`
 year=`python3 variables.py year`
+
+if test -d $data_git_repo_name
+then
+	echo "Website directories exist"
+else
+	cd ../
+	git clone $data_git_repo_link
+	cd "Core Data"
+	echo "Website directories created"
+fi
 
 echo "Enter which category is it?('Technical' , 'Cultural' , 'Informal' , 'Workshops')"
 read category
@@ -23,14 +34,14 @@ if [ $update == "Update" ] || [ $update == "Upd" ]
 then
 	if [ $category == "Workshops" ]
 	then
-		sudo bash update_workshops.sh
+		bash update_workshops.sh
 		echo 'bey'
 		exit
 	fi
 	if [ $category == "Technical" ] || [ $category == "Cultural" ] || [ $category == "Informal" ]
 	then 
 		export category
-		sudo bash update_events.sh
+		bash update_events.sh
 		exit
 	fi
 fi
@@ -52,11 +63,11 @@ export category
 if [ $category == "Technical" ] || [ $category == "Cultural" ] || [ $category == "Informal" ]
 then 
 	export category
-	sudo bash event.sh
+	bash event.sh
 fi
 if [ $category == "Workshops" ]
 then 
-	sudo bash workshop.sh
+	bash workshop.sh
 fi
 
 
